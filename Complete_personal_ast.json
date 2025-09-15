@@ -1,0 +1,2392 @@
+{
+  "name": "Complete_",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "callback_query",
+          "message"
+        ],
+        "additionalFields": {
+          "download": false
+        }
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -944,
+        416
+      ],
+      "id": "efeb05fa-dd73-4137-a873-0ce6cca0f1cb",
+      "name": "Telegram Trigger",
+      "webhookId": "787df198-ea07-45d9-ab46-14285177b393",
+      "credentials": {
+        "telegramApi": {
+          "id": "L4jW9XJUfa4MLqpR",
+          "name": "Personal_assistant"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f55623df-43c9-4008-bd0d-cc61fb5acd20",
+              "leftValue": "={{ $json.message.text }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -496,
+        -416
+      ],
+      "id": "4f1a9694-f888-4e08-91c6-ca5d982a6a55",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f4062d97-3c77-4bce-9c6b-ca1f41564f1e",
+              "leftValue": "={{ $('Telegram Trigger').item.json.message.voice.file_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -512,
+        96
+      ],
+      "id": "86798b37-8e18-4589-a78f-808502377787",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "126770a8-e0e6-414c-931c-739a9f5efa8d",
+              "name": "user_msg",
+              "value": "={{ $json.message.voice.file_id }}",
+              "type": "string"
+            },
+            {
+              "id": "1df71d52-49e1-445f-9fb1-1a45cd7f3044",
+              "name": "chat_id",
+              "value": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -128,
+        -144
+      ],
+      "id": "392d2016-126a-4538-8ca6-0cd02d3ea3a8",
+      "name": "audio_msg"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f7027f4f-0fb6-4db3-adb3-80d32b144a24",
+              "leftValue": "={{ $json.message.photo[2].file_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -544,
+        544
+      ],
+      "id": "e73fc555-6903-43d8-a539-23a69b9df352",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f38d0f46-8a5a-416d-9cbb-616eff5c0cd1",
+              "name": "user_msg",
+              "value": "={{ $json.message.photo[2].file_id }}",
+              "type": "string"
+            },
+            {
+              "id": "73f4e698-c4c1-4ba8-98f4-55a9d83f8da9",
+              "name": "chat_id",
+              "value": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -112,
+        240
+      ],
+      "id": "5a270580-802f-4222-a688-535f8056cb42",
+      "name": "img"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9602fecb-ae60-466f-9148-d010be644bbf",
+              "name": "user_msg",
+              "value": "={{ $json.message.video.file_id }}",
+              "type": "string"
+            },
+            {
+              "id": "0befe542-4047-4926-914e-fc99fe252ebc",
+              "name": "chat_id",
+              "value": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -128,
+        1296
+      ],
+      "id": "48058ba8-2a83-4291-a7fe-4897e424e2d0",
+      "name": "video"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.user_msg }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        192,
+        1296
+      ],
+      "id": "78e6440a-22b0-4a6e-915f-2a48d350a2fa",
+      "name": "Get a file",
+      "webhookId": "f51332be-e599-4ff3-b4d7-51e568e8d4cc",
+      "credentials": {
+        "telegramApi": {
+          "id": "L4jW9XJUfa4MLqpR",
+          "name": "Personal_assistant"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "inputType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        464,
+        1296
+      ],
+      "id": "5176f700-7106-42d4-b9e6-e339368c9b30",
+      "name": "Analyze video",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "1mb1E6lDmYgq4qbk",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.user_msg }}",
+        "options": {
+          "systemMessage": "=You are a helpful assistant. So answer with perfect answer to the prompt.\n\nAnd for today's date and current time, use: {{ $now }}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        3408,
+        336
+      ],
+      "id": "c276bb55-6021-49ee-be64-02a2008118fb",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        3408,
+        176
+      ],
+      "id": "412a1226-4c76-4cdc-a72c-589a93caab92",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "MuwtMf2yFCKgjQTS",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3824,
+        -448
+      ],
+      "id": "021a2b5a-e726-40ed-8786-b5b9ae2f528b",
+      "name": "Send a text message",
+      "webhookId": "bff0687b-2807-461c-a1f3-7a47722c1532",
+      "credentials": {
+        "telegramApi": {
+          "id": "L4jW9XJUfa4MLqpR",
+          "name": "Personal_assistant"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.user_msg }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        288,
+        -144
+      ],
+      "id": "960c57c8-00d8-41a4-b18b-d9fce0a9a011",
+      "name": "Get a file1",
+      "webhookId": "21587ebf-dce0-4f63-9700-a4f344ac9760",
+      "credentials": {
+        "telegramApi": {
+          "id": "L4jW9XJUfa4MLqpR",
+          "name": "Personal_assistant"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "inputType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        1344,
+        -144
+      ],
+      "id": "94310b5c-1462-4600-a2ec-43cc823b41b5",
+      "name": "Transcribe a recording",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LM49LKhYkQKBeSbH",
+          "name": "sahad786"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "55d5232c-53c7-4018-bb0e-871e8fb9b2c9",
+              "name": "user_msg",
+              "value": "={{ $json.content.parts[0].text }}",
+              "type": "string"
+            },
+            {
+              "id": "b686d9e3-5324-4057-a063-aa43a5e6dbb4",
+              "name": "chat_id",
+              "value": "={{ $('audio_msg').item.json.chat_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2560,
+        -144
+      ],
+      "id": "1c738c36-60ce-4579-9fda-405cebb43e32",
+      "name": "chat"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe9a21e8-b69f-4081-b044-91817e2b95c0",
+              "name": "user_msg",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            },
+            {
+              "id": "f43b5c3d-1d26-4c41-9e45-52dbb2c8313f",
+              "name": "chat_id",
+              "value": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2560,
+        -432
+      ],
+      "id": "fa8db753-68df-4598-b5d4-4ae693fdbabc",
+      "name": "Normal_chat"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $vars.personal_assistant_telegram_bot_key }}/getFile?file_id={{ $json.user_msg }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        288,
+        240
+      ],
+      "id": "c6756898-549d-47bb-9bf7-ac0d8b2824a0",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.img_url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        688,
+        240
+      ],
+      "id": "d56b4f2c-5f7a-4cb3-b26e-935fb5f26e02",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "08986a4e-3d6c-432b-9bad-15973e98f339",
+              "name": "img_url",
+              "value": "=https://api.telegram.org/file/bot{{ $vars.personal_assistant_telegram_bot_key }}/{{ $json.result.file_path }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        496,
+        240
+      ],
+      "id": "a41e6634-f200-44d0-9a13-204872948d75",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.imgbb.com/1/upload",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-type",
+              "value": "multipart/form-data"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "image",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        896,
+        240
+      ],
+      "id": "8e80ac4a-21ac-49ef-bccb-ba8ebafa364e",
+      "name": "HTTP Request2",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "qZ4apoTJqx7xcvEA",
+          "name": "Query Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $vars.personal_assistant_telegram_bot_key }}/getUpdates?allowed_updates=%5B%22message%22%5D&timeout=0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1568,
+        240
+      ],
+      "id": "0688da65-acc7-4ff8-ae26-ed4981973201",
+      "name": "HTTP Request3"
+    },
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1376,
+        240
+      ],
+      "id": "9ab150c4-bd2b-41d6-9b86-df042b7e1f0d",
+      "name": "Wait",
+      "webhookId": "81a29786-7f23-40a8-af2b-bf1b7426de58"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "Got your image. What do I wanna do with it? If you are not replied with in 10 seconds, we will move forward with the things in the image.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1152,
+        240
+      ],
+      "id": "6b8290c6-0a53-4af9-b958-0980ff4b8ee9",
+      "name": "Send a text message1",
+      "webhookId": "35986517-05b2-4710-8887-65e73a3f4b99",
+      "credentials": {
+        "telegramApi": {
+          "id": "L4jW9XJUfa4MLqpR",
+          "name": "Personal_assistant"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "92b8f56b-684f-422b-a07f-7d4d8c1c1632",
+              "name": "user_msg",
+              "value": "=Actually, the user asked a question based on an image. The question is,\n```\n{{ $('HTTP Request3').item.json.result[0].message.text }}\n```\n\nAnd also, this image contains the following things, such as\n```\n{{ $json.content.parts[0].text }}\n```\n\nSo, based on this, give me a very suitable answer.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2560,
+        96
+      ],
+      "id": "9698d75e-fe32-4623-80e9-463c8a5aa3e8",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c7fde017-cb4d-4833-b5ef-314f1a1a3228",
+              "leftValue": "={{ $json.result[0].message.text }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1792,
+        240
+      ],
+      "id": "fdff80cd-4be1-4bdd-95aa-f4bd178533ab",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "text": "What are the information containing in this image like the sentences in this image? just extract the contents or sentences in this picture and give it like prompt format. Because I want to give this prompt directly into chatGPT. Also brief about this image",
+        "imageUrls": "={{ $('HTTP Request2').item.json.data.url }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        2048,
+        384
+      ],
+      "id": "52fc95a1-6e83-4ca0-b9f1-6878863cd31d",
+      "name": "Analyze image",
+      "retryOnFail": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LM49LKhYkQKBeSbH",
+          "name": "sahad786"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "08c78486-5adc-420b-9101-c8b5e8586b81",
+              "name": "user_msg",
+              "value": "=\n{{ $json.content.parts[0].text }}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2560,
+        400
+      ],
+      "id": "cdd3e8ca-a298-4f2d-953f-b6106082d2e1",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "contextWindowLength": 3
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        3504,
+        512
+      ],
+      "id": "80f5f317-1b97-4fce-83c0-4045145b6b0c",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "LAQfhCS9r4wkYDGt",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "text": "Extract every details in this image and then also brief what is in this image?",
+        "imageUrls": "={{ $('HTTP Request2').item.json.data.url }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        2256,
+        96
+      ],
+      "id": "754c4b98-1197-4a9d-9de7-e3ec8df993fd",
+      "name": "Analyze image1",
+      "retryOnFail": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LM49LKhYkQKBeSbH",
+          "name": "sahad786"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "If you wanna continue with this image, then with in 20 seconds, you need to give the next prompt. Otherwise we will start with new chat.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3824,
+        -272
+      ],
+      "id": "0f972d36-c575-440c-9c72-d2573101b6a4",
+      "name": "Send a text message2",
+      "webhookId": "97ad9beb-af96-4676-bd56-f4f639c485f2",
+      "credentials": {
+        "telegramApi": {
+          "id": "L4jW9XJUfa4MLqpR",
+          "name": "Personal_assistant"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        4064,
+        -272
+      ],
+      "id": "79c43e9c-8303-48e0-9a2a-94a88b677157",
+      "name": "Wait1",
+      "webhookId": "7d9980d9-3a8b-43f3-9a30-c8389fdc7967"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $vars.personal_assistant_telegram_bot_key }}/getUpdates?allowed_updates=%5B%22message%22%5D&timeout=0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4272,
+        -272
+      ],
+      "id": "0cdf4a5a-5398-4944-a4e2-ce35cad4663e",
+      "name": "HTTP Request4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c7fde017-cb4d-4833-b5ef-314f1a1a3228",
+              "leftValue": "={{ $json.result[0].message.text }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3824,
+        -80
+      ],
+      "id": "0749d574-c121-461d-80e5-129fcb66a216",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3401e1e3-30d9-4bd8-b8a0-42b3fab6507d",
+              "name": "thanks",
+              "value": "Completed",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4880,
+        -64
+      ],
+      "id": "efe75be1-1a41-4a26-9b7e-a9eaf667eea9",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e2af7463-3bad-45a4-a037-15421e71197d",
+              "name": "user_msg",
+              "value": "=The user is again asking about another thing based on the image. that is,\n```\n{{ $('HTTP Request4').item.json.result[0].message.text }}\n```\n\nHere the image description is,\n```\n{{ $('Analyze image1').item.json.content.parts[0].text }}\n```\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4448,
+        656
+      ],
+      "id": "7ab8553a-ffcd-4dcc-85a7-62fa38bf55a3",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6957876b-e6f0-4ee8-b21b-51fdba7b2c80",
+              "name": "prompt_given",
+              "value": "true",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2048,
+        96
+      ],
+      "id": "9340c917-4bc2-4fcb-9731-c76e911984bb",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6b96ed0e-ac29-46cc-b5ef-df1c2cde1287",
+              "leftValue": "={{ $('Edit Fields1').item.json.user_msg }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3792,
+        528
+      ],
+      "id": "70255a48-8761-4bde-a3e6-71c973567e1d",
+      "name": "If5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "49d87d9d-1738-489d-867b-f2821c099ebc",
+              "name": "user_msg",
+              "value": "=The user is asking something based on the image. that is,\n```\n{{ $('HTTP Request4').item.json.result[0].message.text }}\n```\n\nHere the thing about the image is,\n```\n{{ $('Analyze image').item.json.content.parts[0].text }}\n```\n\n\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4448,
+        864
+      ],
+      "id": "1f6ff0bb-8c78-4d18-96a4-30d983011afc",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "84fe146a-d410-4482-a400-a0e989a2e4e0",
+              "leftValue": "={{ $('Normal_chat').item.json.user_msg }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "ignoreCase": false
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4272,
+        -464
+      ],
+      "id": "c54769fe-7f4b-4959-82d3-2f4a684125b4",
+      "name": "If6",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "Got your video. Now tell me that what do you want with this video?",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        832,
+        1296
+      ],
+      "id": "ed109da0-e4d3-4a09-8f8b-7eea8684437c",
+      "name": "Send a text message3",
+      "webhookId": "68fa651f-e29e-438d-99f4-dac71ad50350",
+      "credentials": {
+        "telegramApi": {
+          "id": "L4jW9XJUfa4MLqpR",
+          "name": "Personal_assistant"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1136,
+        1296
+      ],
+      "id": "48fcfb43-3bca-4dee-8986-646196b5e0f8",
+      "name": "Wait2",
+      "webhookId": "be5a5477-b217-4af5-ad00-34248e3a3e72"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $vars.personal_assistant_telegram_bot_key }}/getUpdates?allowed_updates=%5B%22message%22%5D&timeout=0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1568,
+        1296
+      ],
+      "id": "f230a45b-7111-40fd-b7ff-627afa7fbb36",
+      "name": "HTTP Request5"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c7fde017-cb4d-4833-b5ef-314f1a1a3228",
+              "leftValue": "={{ $json.result[0].message.text }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2032,
+        1296
+      ],
+      "id": "f5435c19-9438-4789-bfc9-bb1111331d16",
+      "name": "If7"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6576d366-7f3b-44fb-8123-0e19a95c8e74",
+              "name": "user_msg",
+              "value": "=Actually, the user asked a question based on a video. The question is,\n```\n{{ $('HTTP Request5').item.json.result[0].message.text }}\n```\n\nAnd also, this video contains the following things, such as\n```\n{{ $('Analyze video').item.json.content.parts[0].text }}\n```\n\nSo, based on this, give me a very suitable answer.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2560,
+        1296
+      ],
+      "id": "af419bee-dd75-4d1c-9de7-ba6d0bd23107",
+      "name": "Edit Fields7"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "94c80412-9541-41f2-b92e-dd007ed48f8e",
+              "leftValue": "={{ $('Edit Fields7').item.json.user_msg }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3824,
+        112
+      ],
+      "id": "040116df-f43c-4f9c-aae4-7b8adcb4085e",
+      "name": "If8"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ed7591dc-99b4-4dbf-ba40-f561468f8c20",
+              "name": "user_msg",
+              "value": "=The user is again asking about another thing based on the image. that is,\n``` \n{{ $('HTTP Request4').item.json.result[0].message.text }} \n```  \n\nHere the image description is, \n```\n{{ $('Analyze video').item.json.content.parts[0].text }}\n```",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4448,
+        96
+      ],
+      "id": "ebe46964-e1c8-4979-8f5f-e9e0f2006803",
+      "name": "Edit Fields8"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5090a46f-e082-4648-a6ca-7b6dc225912a",
+              "leftValue": "={{ $('Edit Fields10').item.json.audio_file }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3824,
+        304
+      ],
+      "id": "90e27973-b775-48fa-8eb8-74e6645b4725",
+      "name": "If9"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "feb6b884-b721-4e59-ba33-87a167ad917e",
+              "leftValue": "={{ $json.message.audio.file_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -528,
+        1040
+      ],
+      "id": "2287c8c1-4c51-4d50-8898-965472412046",
+      "name": "If10"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "64238210-8c04-4732-bc5c-dd2a5a1611e5",
+              "name": "audio_file",
+              "value": "={{ $json.message.audio.file_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -112,
+        736
+      ],
+      "id": "79af2cdc-1a46-4962-9425-ee7c6b8227e5",
+      "name": "Edit Fields10"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.audio_file }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        288,
+        736
+      ],
+      "id": "0c4a1819-03f5-4a2b-b2c1-e223da70b9f7",
+      "name": "Get a file2",
+      "webhookId": "f51332be-e599-4ff3-b4d7-51e568e8d4cc",
+      "credentials": {
+        "telegramApi": {
+          "id": "L4jW9XJUfa4MLqpR",
+          "name": "Personal_assistant"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "inputType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        544,
+        736
+      ],
+      "id": "f7b1b31a-217e-450b-9a58-130cefcee0c3",
+      "name": "Transcribe a recording1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LM49LKhYkQKBeSbH",
+          "name": "sahad786"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "Got your audio. What do I wanna do with it? If you are not replied with in 20 seconds, we will move forward with the things in this audio.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        832,
+        736
+      ],
+      "id": "d5195ef3-3bd8-42f4-91ca-9a70db33bee6",
+      "name": "Send a text message4",
+      "webhookId": "35986517-05b2-4710-8887-65e73a3f4b99",
+      "credentials": {
+        "telegramApi": {
+          "id": "L4jW9XJUfa4MLqpR",
+          "name": "Personal_assistant"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1136,
+        736
+      ],
+      "id": "da485467-115e-455f-99c2-769a2dbdf3ce",
+      "name": "Wait3",
+      "webhookId": "6ad3ca2e-f035-495a-b21c-c73f8bade2e8"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $vars.personal_assistant_telegram_bot_key }}/getUpdates?allowed_updates=%5B%22message%22%5D&timeout=0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1472,
+        736
+      ],
+      "id": "41fa074f-b1e0-47f3-9f9a-736bbadd063f",
+      "name": "HTTP Request6"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "eac707db-fc2d-44b2-a5a9-791d8a80b437",
+              "leftValue": "={{ $json.result[0].message.text }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2048,
+        736
+      ],
+      "id": "19e7b459-75bc-4571-ba92-c198ad6b3ac9",
+      "name": "If11"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "92b8f56b-684f-422b-a07f-7d4d8c1c1632",
+              "name": "user_msg",
+              "value": "=Actually, the user asked a question based on an audio. The question is,\n```\n{{ $('HTTP Request6').item.json.result[0].message.text }}\n```\n\nAnd also, the transcribed version of this audio is,\n```\n{{ $('Transcribe a recording1').item.json.content.parts[0].text }}\n```\n\nSo, based on this, give me a very suitable answer.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2560,
+        720
+      ],
+      "id": "99988792-62bd-4ff7-a4e5-7af2a263b440",
+      "name": "Edit Fields12"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "08c78486-5adc-420b-9101-c8b5e8586b81",
+              "name": "user_msg",
+              "value": "={{ $('Transcribe a recording1').item.json.content.parts[0].text }}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2560,
+        976
+      ],
+      "id": "0373eb67-4dc7-4518-b9b7-6367288a9e88",
+      "name": "Edit Fields13"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "340ebfcb-606e-467d-bb7c-9113bb26a06d",
+              "leftValue": "={{ $('Edit Fields12').item.json.user_msg }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4064,
+        288
+      ],
+      "id": "1b4b713a-3554-46d7-ba79-2343f3214e41",
+      "name": "If12"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f1bfe1d3-5cb5-4664-b918-9cf53b3f2586",
+              "name": "user_msg",
+              "value": "=The user is again asking another thing based on the audio. that is, \n```\n{{ $('HTTP Request4').item.json.result[0].message.text }} \n``` \nHere is the transcribed version of the audio is, \n```\n{{ $('Transcribe a recording1').item.json.content.parts[0].text }}\n```",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4448,
+        272
+      ],
+      "id": "1c3fc412-e705-4906-b7bb-c6057738b4f3",
+      "name": "Edit Fields9"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e0837f87-82d5-4226-b1b4-1463cc710a47",
+              "name": "user_msg",
+              "value": "=The user is asking something based on the audio. that is, \n```\n{{ $('HTTP Request4').item.json.result[0].message.text }}\n```  \nHere, the transcribed version of this audio is, \n``` \n{{ $('Transcribe a recording1').item.json.content.parts[0].text }}\n```",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4448,
+        464
+      ],
+      "id": "31990d6d-ca38-4886-a8f5-45d1776f039a",
+      "name": "Edit Fields11"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9f70fce0-ccff-420c-b960-794d80541c91",
+              "leftValue": "={{ $('chat').item.json.user_msg}}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4064,
+        -464
+      ],
+      "id": "a2adab6c-d262-409a-bca4-043bda963f06",
+      "name": "If13",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "content": "# Receiving different types of messages from telegram.\n## Normal Text msg\n## Recorded Audio msg\n## Image\n## Video\n## Other files",
+        "height": 2224,
+        "width": 752
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1040,
+        -544
+      ],
+      "typeVersion": 1,
+      "id": "c9137695-2129-49c6-bafe-4fd6954036ac",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# Different Prompts that providing into the Agent",
+        "height": 2224,
+        "width": 688
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2400,
+        -576
+      ],
+      "typeVersion": 1,
+      "id": "40381b80-8b08-46cd-8cec-33aa4d25ec69",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# Agent",
+        "height": 720,
+        "width": 336,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3344,
+        -16
+      ],
+      "typeVersion": 1,
+      "id": "a08622dd-461f-4880-9cbf-14087d65422a",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# Prompt for continuing the loop",
+        "height": 1120,
+        "width": 352,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4336,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "abef68d5-1dc9-4516-947f-62427dff8523",
+      "name": "Sticky Note3"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Normal_chat",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "audio_msg",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "img",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "video": {
+      "main": [
+        [
+          {
+            "node": "Get a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file": {
+      "main": [
+        [
+          {
+            "node": "Analyze video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze video": {
+      "main": [
+        [
+          {
+            "node": "Send a text message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "audio_msg": {
+      "main": [
+        [
+          {
+            "node": "Get a file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file1": {
+      "main": [
+        [
+          {
+            "node": "Transcribe a recording",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe a recording": {
+      "main": [
+        [
+          {
+            "node": "chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "chat": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normal_chat": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "img": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message1": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Analyze image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze image": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze image1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "If13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message2": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request4": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "If8",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Analyze image1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If5": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If6": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send a text message2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message3": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request5": {
+      "main": [
+        [
+          {
+            "node": "If7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If7": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If8": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields8",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields8": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If9": {
+      "main": [
+        [
+          {
+            "node": "If12",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If10": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields10",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields10": {
+      "main": [
+        [
+          {
+            "node": "Get a file2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file2": {
+      "main": [
+        [
+          {
+            "node": "Transcribe a recording1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe a recording1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message4": {
+      "main": [
+        [
+          {
+            "node": "Wait3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait3": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request6": {
+      "main": [
+        [
+          {
+            "node": "If11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If11": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields12",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields12": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields13": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If12": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields9",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields11": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields9": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If13": {
+      "main": [
+        [],
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "81862ebf-54d0-46f0-ab61-5fd14ffda854",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1962c1dd0115520ce1fd8ffa349b050bcc90427a6af1437623b8148db22da556"
+  },
+  "id": "7s2etJSHpafOos7m",
+  "tags": []
+}

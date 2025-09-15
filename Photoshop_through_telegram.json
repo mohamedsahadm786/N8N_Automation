@@ -1,0 +1,1559 @@
+{
+  "name": "Photoshop_through_telegram",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -336,
+        -352
+      ],
+      "id": "11d28a9c-54e9-4fe6-a671-347e53074199",
+      "name": "Telegram Trigger",
+      "webhookId": "072fab52-f167-46be-ba17-2c9fa3b08e3c",
+      "credentials": {
+        "telegramApi": {
+          "id": "pfz9Zk8buZ4OPNLw",
+          "name": "photoshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.photo[2].file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1312,
+        16
+      ],
+      "id": "c59d87f9-b1eb-49cd-805e-250ba504918b",
+      "name": "Get a file",
+      "webhookId": "30e1e1e7-ee76-47ca-b099-f9c05dab6c5d",
+      "credentials": {
+        "telegramApi": {
+          "id": "pfz9Zk8buZ4OPNLw",
+          "name": "photoshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -1312,
+        176
+      ],
+      "id": "e9300e5e-7e57-4c68-b708-fcf9fca70897",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0763c55a-db59-47b3-96cf-308df75d7bdf",
+              "leftValue": "={{ $json.message.caption }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -336,
+        -208
+      ],
+      "id": "18c95063-3555-441e-b003-6793e899188f",
+      "name": "If",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $('Telegram Trigger').item.json.message.photo[2].file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        400,
+        32
+      ],
+      "id": "44d3d1aa-e420-4046-9ee9-591c4f64a963",
+      "name": "Get a file1",
+      "webhookId": "30e1e1e7-ee76-47ca-b099-f9c05dab6c5d",
+      "credentials": {
+        "telegramApi": {
+          "id": "pfz9Zk8buZ4OPNLw",
+          "name": "photoshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        416,
+        208
+      ],
+      "id": "c420464f-a04b-4d22-a870-2dcc85ada02b",
+      "name": "Extract from File1"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "=Got your image and here, you want the following operation with this image.\n--------------------------------------------------------------\n{{ $('Telegram Trigger').item.json.message.caption }}\n--------------------------------------------------------------\nJust wait a few seconds, and I will share the modified image with you.\nThank you!",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        416,
+        416
+      ],
+      "id": "9e79e7d9-2110-4028-9ad6-40221ff8c3b2",
+      "name": "Send a text message1",
+      "webhookId": "34e63104-4ed5-4246-ae39-1a5ad7f93a63",
+      "credentials": {
+        "telegramApi": {
+          "id": "pfz9Zk8buZ4OPNLw",
+          "name": "photoshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ $json.user_prompt }}"
+            }
+          ]
+        },
+        "options": {
+          "systemMessage": "You are a prompt enhancer specialized in generating precise, detailed, and NanoBanana-compatible Photoshop instructions. \nYour task is to take the user’s raw request given in the prompt and transform it into a fully enhanced, explicit, and structured prompt that NanoBanana can interpret with maximum accuracy.\n\nRules:\n1. Output only plain text with no symbols that could break JSON such as quotes, braces, brackets, colons, markdown characters, or slashes. \n2. Rewrite the request into a clear Photoshop editing instruction without ambiguity. \n3. Do not invent actions outside the user’s intent. Only clarify and structure their request. \n4. Optimize for NanoBanana readability: use direct step by step phrasing. \n5. Return only the plain text enhanced prompt as the final output with no extra explanation.\n\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        176
+      ],
+      "id": "944e5348-f99d-4f48-9e46-f208f54df276",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "1mb1E6lDmYgq4qbk",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-goog-api-key",
+              "value": "AIzaSyBesH3nAfVPkkLtWyRhUrYKwboU1mgfve8"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"inline_data\": {\n            \"mime_type\": \"image/png\",\n            \"data\": \"{{ $json.base64 }}\"\n          }\n        },\n        {\n          \"text\": {{ $json.prompt }}\n        }\n      ]\n    }\n  ],\n  \"generationConfig\": {\n    \"responseModalities\": [\n      \"IMAGE\"\n    ]\n  }\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -128,
+        1056
+      ],
+      "id": "98fe8756-730a-496c-b2eb-fd598f35c69f",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "candidates[0].content.parts[0].inlineData.data",
+        "binaryPropertyName": "created_img",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        512,
+        1472
+      ],
+      "id": "3eca6035-629f-45e6-a2dc-16c1062cb277",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "binaryData": true,
+        "binaryPropertyName": "created_img",
+        "additionalFields": {
+          "caption": "Here you go."
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        32,
+        1424
+      ],
+      "id": "ba339306-8205-454b-8454-112ec76da45d",
+      "name": "Send a photo message",
+      "webhookId": "106d0591-125c-4376-889f-eb42c6ebb4c8",
+      "credentials": {
+        "telegramApi": {
+          "id": "pfz9Zk8buZ4OPNLw",
+          "name": "photoshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "={{ $json.result.chat.id }}",
+        "message": "If you want further modification in this same image - choose the option 'MODIFICATION', other wise simply choose 'THANK YOU'\n\n-----------------------\nTips for modification\n1 - First type the prompt in chat section in advance then after select the 'MODOFICATION' and then send the new prompt. because it only wait 5 seconds to get the next prompt.",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double",
+            "approveLabel": "✅ MODIFICATION",
+            "disapproveLabel": "❌ THANK YOU"
+          }
+        },
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -384,
+        1424
+      ],
+      "id": "c33d6592-e8cd-438d-8771-93eaafcc819c",
+      "name": "Send message and wait for response1",
+      "webhookId": "fa208b4a-487f-4867-b964-442d7d9907c5",
+      "credentials": {
+        "telegramApi": {
+          "id": "pfz9Zk8buZ4OPNLw",
+          "name": "photoshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ae13906d-447c-4988-9106-aca37a33de4a",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -848,
+        1424
+      ],
+      "id": "33d531a6-c2e1-42e3-8ac8-e6afa4a37d4c",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -848,
+        1248
+      ],
+      "id": "2bfcbf2a-3ae0-4cab-8dc6-1372122850f7",
+      "name": "Wait",
+      "webhookId": "62fb26a9-c5c0-41ae-abfe-bb89a60ed87d"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $vars.photo_generator }}/deleteWebhook?drop_pending_updates=true",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1280,
+        1424
+      ],
+      "id": "125a6090-0fae-4a50-9985-6266cb73836b",
+      "name": "HTTP Request10"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $vars.photo_generator }}/getWebhookInfo",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1280,
+        1248
+      ],
+      "id": "030b3651-6271-4096-bd56-46215d8d5e01",
+      "name": "HTTP Request7"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Initializes and outputs { offset }\nconst s = $getWorkflowStaticData('global');\nif (typeof s.offset !== 'number') {\n  s.offset = 0;        // first-ever run; after deleteWebhook this is fine\n}\nreturn [{ offset: s.offset }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -384,
+        1248
+      ],
+      "id": "0efb611e-2fc2-449a-b439-31d77fa5b8a3",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $vars.photo_generator }}/getUpdates",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "allowed_updates",
+              "value": "[\"message\"]"
+            },
+            {
+              "name": "timeout",
+              "value": "0"
+            },
+            {
+              "name": "limit",
+              "value": "1"
+            },
+            {
+              "name": "offset",
+              "value": "={{$json.offset}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        64,
+        1248
+      ],
+      "id": "c79a9387-f005-446f-a4fe-aa51019b0b5c",
+      "name": "HTTP Request3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = $getWorkflowStaticData('global');\nconst res = items[0].json;\nlet last = null;\n\nif (Array.isArray(res.result) && res.result.length) {\n  last = res.result[res.result.length - 1];   // the latest\n  // Advance offset so we've \"consumed\" everything up to last\n  s.offset = last.update_id + 1;\n}\n\n// Expose both the last message (could be null) and the new offset\nreturn [{\n  last_message: last,                       // e.g. last_message.message.text\n  offset: s.offset,\n  has_last: !!last\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        1248
+      ],
+      "id": "6af23cfc-3b7f-4eb0-92c0-5ca0855fa15c",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "31161dd7-93ca-45d4-be22-b58f3d0678e5",
+              "name": "=user_prompt",
+              "value": "={{ $('Telegram Trigger').item.json.message.caption }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        800
+      ],
+      "id": "f697d0a7-469a-41f9-a035-2c0016c7dbd6",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "I have got your image. now tell me what do I wanna do with this image?",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1312,
+        352
+      ],
+      "id": "d84badcd-19de-49dd-acbd-cc459d61a996",
+      "name": "Send a text message",
+      "webhookId": "ffbf3ac0-b0cb-413b-9592-9986751be091",
+      "credentials": {
+        "telegramApi": {
+          "id": "pfz9Zk8buZ4OPNLw",
+          "name": "photoshop"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1120,
+        16
+      ],
+      "id": "9f5ccd7a-5f44-4aaf-8119-fdbfba289656",
+      "name": "Wait1",
+      "webhookId": "62fb26a9-c5c0-41ae-abfe-bb89a60ed87d"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $vars.photo_generator }}/deleteWebhook?drop_pending_updates=true",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1312,
+        512
+      ],
+      "id": "e421ff3b-63f3-4beb-a8c7-800035d4b14a",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $vars.photo_generator }}/getWebhookInfo",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1312,
+        672
+      ],
+      "id": "ca49b236-182b-45ee-ad13-57429d10fc7c",
+      "name": "HTTP Request8"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Initializes and outputs { offset }\nconst s = $getWorkflowStaticData('global');\nif (typeof s.offset !== 'number') {\n  s.offset = 0;        // first-ever run; after deleteWebhook this is fine\n}\nreturn [{ offset: s.offset }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1104,
+        176
+      ],
+      "id": "df2b5d23-9fd9-4879-b962-69505475801c",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $vars.photo_generator }}/getUpdates",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "allowed_updates",
+              "value": "[\"message\"]"
+            },
+            {
+              "name": "timeout",
+              "value": "0"
+            },
+            {
+              "name": "limit",
+              "value": "1"
+            },
+            {
+              "name": "offset",
+              "value": "={{$json.offset}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1104,
+        352
+      ],
+      "id": "b984186e-57e7-4d82-9d39-a627bf7586f4",
+      "name": "HTTP Request4"
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = $getWorkflowStaticData('global');\nconst res = items[0].json;\nlet last = null;\n\nif (Array.isArray(res.result) && res.result.length) {\n  last = res.result[res.result.length - 1];   // the latest\n  // Advance offset so we've \"consumed\" everything up to last\n  s.offset = last.update_id + 1;\n}\n\n// Expose both the last message (could be null) and the new offset\nreturn [{\n  last_message: last,                       // e.g. last_message.message.text\n  offset: s.offset,\n  has_last: !!last\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1104,
+        512
+      ],
+      "id": "843b0c9c-f955-420c-8ffe-b897163b8364",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "04154209-526a-4276-ae9f-0a08f986c7d5",
+              "leftValue": "={{ $json.last_message.message.text }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1104,
+        656
+      ],
+      "id": "00607a01-df33-47e7-a08d-e12dd2b7262c",
+      "name": "If2",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bfc22f33-074d-4a71-8a9b-4462f3f64679",
+              "name": "user_prompt",
+              "value": "={{ $('Code in JavaScript3').item.json.last_message.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1104,
+        864
+      ],
+      "id": "c625c3bf-5dc3-4468-a728-5adac1df64fc",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "content": "# IMAGE ONLY",
+        "height": 1280,
+        "width": 496
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1440,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "9b78b404-c2c3-4ac3-8aec-82c59d4dc597",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3e96e294-dab8-435b-8ef6-770b6fad512d",
+              "leftValue": "={{ $('Edit Fields4').item.json.base64 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -352,
+        816
+      ],
+      "id": "6cc610fb-c888-4b60-a9ce-02ebe7c4d763",
+      "name": "If3",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e1820343-80ac-4765-8d53-238aa883e393",
+              "leftValue": "={{ $('Edit Fields4').item.json.base64 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -720,
+        816
+      ],
+      "id": "a5267e96-ac6e-4525-a1c2-260494ba279b",
+      "name": "If4",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "350cec8b-46ba-4bab-963c-54e3eabf9f3e",
+              "name": "base64",
+              "value": "={{ $('Extract from File').item.json.data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1312,
+        864
+      ],
+      "id": "5eabeaaa-9793-4180-83b1-985966d272cf",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "89446621-49cb-44c3-853c-19c523b4076e",
+              "name": "user_prompt",
+              "value": "={{ $json.last_message.message.text }}",
+              "type": "string"
+            },
+            {
+              "id": "6d8b590b-a2a1-40a4-adbe-b339b20050e6",
+              "name": "base64",
+              "value": "={{ $('HTTP Request2').item.json.candidates[0].content.parts[0].inlineData.data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -352,
+        416
+      ],
+      "id": "d5ceef81-951d-4cef-b018-b9daa706ccd9",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7a1102e0-0965-4b46-8ace-753e774ffc34",
+              "name": "user_prompt",
+              "value": "={{ $('Edit Fields3').item.json.user_prompt }}",
+              "type": "string"
+            },
+            {
+              "id": "cb79b468-02b5-4181-9733-7db19a214740",
+              "name": "base64",
+              "value": "={{ $('Edit Fields4').item.json.base64 }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -720,
+        176
+      ],
+      "id": "c37eb557-0547-47a7-b0a3-59f2fc1d659b",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "294f357e-f1c6-4e7f-923c-e222f283bb9d",
+              "name": "base64",
+              "value": "={{ $('Extract from File1').item.json.data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        592
+      ],
+      "id": "142791c5-4dde-49c9-852b-8571b0dbc5d1",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5586e163-6b33-4641-a3b2-eba164f6f3bf",
+              "name": "user_prompt",
+              "value": "={{ $('Edit Fields').item.json.user_prompt }}",
+              "type": "string"
+            },
+            {
+              "id": "eed91bc5-2802-4c72-93af-26a6512834b6",
+              "name": "base64",
+              "value": "={{ $('Edit Fields6').item.json.base64 }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        48,
+        160
+      ],
+      "id": "e872bd2b-25df-4bab-a37c-4c722b90a8ed",
+      "name": "Edit Fields7"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7a1102e0-0965-4b46-8ace-753e774ffc34",
+              "name": "prompt",
+              "value": "={{ $('Message a model').item.json.content.parts[0].text.toJsonString() }}",
+              "type": "string"
+            },
+            {
+              "id": "cb79b468-02b5-4181-9733-7db19a214740",
+              "name": "base64",
+              "value": "={{ $('Edit Fields4').item.json.base64 }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        1056
+      ],
+      "id": "c6cb2a9d-ec0e-43a3-8cba-226ab833b331",
+      "name": "Edit Fields8"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5586e163-6b33-4641-a3b2-eba164f6f3bf",
+              "name": "prompt",
+              "value": "={{ $('Message a model').item.json.content.parts[0].text.toJsonString() }}",
+              "type": "string"
+            },
+            {
+              "id": "eed91bc5-2802-4c72-93af-26a6512834b6",
+              "name": "base64",
+              "value": "={{ $('Edit Fields6').item.json.base64 }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -896,
+        1056
+      ],
+      "id": "1910d5de-8b4a-4409-b024-4bf90627bf2b",
+      "name": "Edit Fields9"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3ad91fe3-3312-4699-9ebc-498b87182823",
+              "leftValue": "={{ $('Edit Fields2').item.json.user_prompt }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        64,
+        816
+      ],
+      "id": "13530176-9657-447d-86ed-df17a7479f39",
+      "name": "If5",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "566e3a71-e978-4c8f-a7d8-93a9962c584c",
+              "name": "prompt",
+              "value": "={{ $('Message a model').item.json.content.parts[0].text.toJsonString() }}",
+              "type": "string"
+            },
+            {
+              "id": "8042f04e-444b-4ff6-b3bc-62eac875b491",
+              "name": "base64",
+              "value": "={{ $('Edit Fields2').item.json.base64}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -528,
+        1056
+      ],
+      "id": "4e604fd4-70b0-457f-937d-57b2ee14af2d",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "content": "# IMAGE + TEXT",
+        "height": 1312,
+        "width": 384
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        336,
+        -192
+      ],
+      "typeVersion": 1,
+      "id": "7d82398c-cdab-48f6-9b69-4b106997e582",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# PROMPT ENHANCER",
+        "height": 608,
+        "width": 960,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -768,
+        64
+      ],
+      "typeVersion": 1,
+      "id": "b2ff9428-b743-45c3-9558-d7d9655732d0",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# CONTINUE THE EDITING",
+        "height": 608,
+        "width": 2160,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1440,
+        1104
+      ],
+      "typeVersion": 1,
+      "id": "af8dcddb-eca9-43f1-ada2-215c314e60ac",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "# TRIGGER + CLASSIFICATION",
+        "height": 512,
+        "width": 368,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -448,
+        -480
+      ],
+      "typeVersion": 1,
+      "id": "b65c9e2f-bbb9-4159-acfb-bdce42037963",
+      "name": "Sticky Note4"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Get a file1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get a file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file1": {
+      "main": [
+        [
+          {
+            "node": "Extract from File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "If5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Send a photo message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a photo message": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request10": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request7": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request8": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request4": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields8",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields9",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields8": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields9": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If5": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "394be8b3-6f1f-4597-8d7c-6497815082d9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1962c1dd0115520ce1fd8ffa349b050bcc90427a6af1437623b8148db22da556"
+  },
+  "id": "zwUfLzBB6Fg4wWJr",
+  "tags": []
+}

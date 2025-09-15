@@ -1,0 +1,400 @@
+{
+  "name": "Cover letter generator",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "11-nrU7E_r684C9xCfa1DPP6fuMfqv4ES",
+          "mode": "list",
+          "cachedResultName": "profile.txt",
+          "cachedResultUrl": "https://drive.google.com/file/d/11-nrU7E_r684C9xCfa1DPP6fuMfqv4ES/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -592,
+        208
+      ],
+      "id": "bbe1c778-07d5-4149-b990-ced8d780a68e",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "CXjhKjD19R5r5fiN",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "cover_letter",
+          "mode": "list",
+          "cachedResultName": "cover_letter"
+        },
+        "options": {
+          "queryName": "match_cover_letter"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        -240,
+        208
+      ],
+      "id": "4ace537a-d569-4527-bcbc-696218b153ad",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "EP8qV5BuqoLRUXM4",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a professional cover letter generator by using 4 fields. such as \n1 - Job title\n2 - Company name\n3 - Company location\n4 - Job description\n\nSo your job is, using these 4 fields, write a very suitable, maximum key term included cover letter exactly in the format of the below given cover letter example, and also try to keep the same word count of the content exactly like in the count of the below given example. Additionally, for the genuine implementation of the key terms in the Cover letter (i.e., for authenticity), use the 'Supabase vector store1' tool that I have connected here. There, you can access the information about my background. \n\nThe example format of the cover letter is,\n\n```\n\n Dear Hiring Manager,\n\n I am writing to express my interest in the Machine Learning Scientist position at Expedia Group. With a Master’s degree in Statistics from Pondicherry University and extensive hands-on experience gained through multiple internships, I have developed a robust foundation in machine learning and statistical analysis. My recent role as a Data Scientist Intern at iDatalytics allowed me to implement AI-powered applications and deploy ML pipelines, aligning well with your requirement for candidates skilled in taking features from concept to production.\n\n Throughout my internships, I have demonstrated proficiency in Python and its data science ecosystem, including scikit-learn and TensorFlow, and have used SQL extensively for data querying. My experience in building and deploying models using GenAI and LLM technologies is complemented by my ability to design and analyze A/B tests, ensuring rigorous validation of model performance, a key aspect of the role at Expedia Group. Additionally, my work as a Data Analyst Intern at Nevar Systems sharpened my skills in statistical analysis and exploratory data analysis, significantly improving project insight delivery.\n\n I am particularly drawn to the collaborative and innovative environment at Expedia Group. My experience working with cross-functional teams, as demonstrated in my roles at Btech Walleh and Younity.In, has equipped me with the ability to effectively partner with senior scientists and engineers to develop data-driven solutions. I am eager to contribute to Expedia’s mission by leveraging my skills in machine learning and statistical modeling to drive impactful business outcomes.\n\nSincerely,\nMohamed Sahad M\n\n```\n\n\nSo here are your 4 fields,\n1 - Company name = {{ $('Triger - 2').item.json['Company name'] }} ,\n2 - Company location = {{ $('Triger - 2').item.json['Company location'] }},\n3 - Job title = {{ $('Triger - 2').item.json['Job title'] }},\n4 - Job description = {{ $('Triger - 2').item.json['Job description'] }}\n\n\nAnd please provide the final answer in HTML format, because if I send this as an email, I can send this as a structured email. Also, give it in JSON format where this generated cover letter content is the body of the email, and also, you have to add its subject, and the subject should be like - \n\n```\nCover Letter for the job role '{{ $('Triger - 2').item.json['Job title'] }}' for the company '{{ $('Triger - 2').item.json['Company name'] }}'\n```\n\nSo the json output structure is,\n{\n \"subject\":\n \"body\":\n}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a proffesional cover letter generator based on the job title and description. So when you need any information about my background (my studies, projects, internships, the tools that I know, etc) to customize the cover letter based on my background, you can use the tool 'Background_info', it contains the details about my background."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -480,
+        -336
+      ],
+      "id": "780de97c-8e61-4241-a290-3f83eb8ae5f6",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -144
+      ],
+      "id": "b67ec3e2-4362-4a3e-ad25-05810b4505ea",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "mmhvQSee0BCA4vRe",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n \"subject\":\"something\",\n \"body\":\"Something\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -80,
+        -144
+      ],
+      "id": "ed374a64-32cb-4a5c-afe0-3409a60cec1b",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "={{ $json.output.subject }}",
+        "emailType": "html",
+        "message": "={{ $json.output.body }}",
+        "options": {
+          "sendTo": "mohamedsahadm786@gmail.com"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -144,
+        -336
+      ],
+      "id": "cd79491b-38ea-48c6-a9d8-eed32f851c5e",
+      "name": "Create a draft",
+      "webhookId": "33857085-6caa-4198-935a-2dc01e8e19d3",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "TsUfbA1UsEKeDbEi",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -816,
+        208
+      ],
+      "id": "d4a0ba90-b76a-47ab-a46c-76e7f3a5b398",
+      "name": "Trigger - 1",
+      "notes": "Trigger - 1"
+    },
+    {
+      "parameters": {
+        "formTitle": "Job Informations",
+        "formDescription": "You have to give basically 4 inputs here. It will helps to create the customized COVER LETTER based on the provided information.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Job title",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Company name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Company location",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Job description",
+              "fieldType": "textarea",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -800,
+        -336
+      ],
+      "id": "7ba68a56-9047-4deb-8732-c20ec06662d8",
+      "name": "Triger - 2",
+      "webhookId": "01329d12-0fc6-4464-98f2-a354f23269fc",
+      "notesInFlow": true,
+      "notes": "First set the supabase. Then trigger this"
+    },
+    {
+      "parameters": {
+        "content": "# Stage for giving our own documents and vectorization.\n",
+        "height": 432,
+        "width": 1040,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -880,
+        128
+      ],
+      "typeVersion": 1,
+      "id": "b37e310b-f19c-4875-bf3b-8f39fedfa7d0",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# Stage for creating the customized cover letter\n",
+        "height": 480,
+        "width": 1040,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -880,
+        -432
+      ],
+      "typeVersion": 1,
+      "id": "c5846f04-9c18-41f9-9fde-c6141a502077",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        32,
+        432
+      ],
+      "id": "d6457e6b-75ee-4a03-acbb-dc9e34016e7f",
+      "name": "Default Data Loader1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -464,
+        416
+      ],
+      "id": "c4108c90-6f73-4aa1-9d91-68a4ccd608f6",
+      "name": "Embeddings OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "Coevl1jYJ8VkJr0e",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "To get information about my background.",
+        "tableName": {
+          "__rl": true,
+          "value": "cover_letter",
+          "mode": "list",
+          "cachedResultName": "cover_letter"
+        },
+        "topK": 5,
+        "options": {
+          "queryName": "match_cover_letter"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        -464,
+        -80
+      ],
+      "id": "0347b1ca-4feb-4ff0-8f88-149afd362818",
+      "name": "Background_info",
+      "credentials": {
+        "supabaseApi": {
+          "id": "FCBvIBUFI47QyoI1",
+          "name": "Supabase account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Create a draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger - 1": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Triger - 2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader1": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          },
+          {
+            "node": "Background_info",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Background_info": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a34d53fd-9e72-4ef5-b168-dd5babd52b6f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c8efe8be8c4c722716e432a55994bf9455989b2c3fae226848145b37ff4de51a"
+  },
+  "id": "IktPyP5QDafS5XYH",
+  "tags": []
+}
